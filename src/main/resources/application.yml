@@ -1,7 +1,0 @@
-spring:
-  ai:
-    openai:
-      api-key:
-      chat:
-        options:
-          model:

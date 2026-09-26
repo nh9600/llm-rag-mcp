@@ -13,6 +13,15 @@ java {
 	}
 }
 
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' } // 2.x가 GA면 없어도 됨
+}
+
+ext {
+	set('springAiVersion', "2.0.0") // ← 아래 확인 방법 참고
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
