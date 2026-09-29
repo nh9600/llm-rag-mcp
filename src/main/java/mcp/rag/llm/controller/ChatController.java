@@ -37,12 +37,12 @@ public class ChatController {
     }
 
     // 3. 스트리밍 응답 (답변이 조각조각 흘러나옴)
-    @GetMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)// Server-Sent Events(SSE) 형식
     public Flux<String> stream(@RequestParam String q,
-                               @RequestParam(defaultValue = "default") String sessionId) {
+                               @RequestParam(defaultValue = "default") String sessionId) {// 사용자의 대화 세션 ID
         return chatClient.prompt()
                 .user(q)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))// 세션 ID의 대화내용 기억
                 .stream()
                 .content();
     }
