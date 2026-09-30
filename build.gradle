@@ -15,7 +15,7 @@ java {
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
+    maven { url = 'https://repo.spring.io/milestone' }
 }
 
 ext {
@@ -31,13 +31,15 @@ dependencyManagement {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // OpenAI → Gemini
+    // Gemini 채팅 + 임베딩
     implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
+    implementation 'org.springframework.ai:spring-ai-starter-model-google-genai-embedding'
+
+	// RAG
+	implementation 'org.springframework.ai:spring-ai-vector-store-advisor'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    
-    implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
 }
 
 tasks.named('test') {
