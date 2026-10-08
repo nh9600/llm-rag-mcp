@@ -1,14 +1,14 @@
 package mcp.rag.llm.controller;
 
-import org.springframework.http.MediaType;
-
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import mcp.rag.llm.tools.DateTimeTools;
 import reactor.core.publisher.Flux;
 
 @RestController
@@ -44,6 +44,22 @@ public class ChatController {
                 .user(q)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))// 세션 ID의 대화내용 기억
                 .stream()
+                .content();
+    }
+    
+    /**
+     * Tool Calling API
+     * - LLM에 호출 가능한 도구(DateTimeTools) 목록을 함께 전달
+     * - LLM이 질문을 분석해 필요한 도구를 선택하면 Spring AI가 자동 실행 후 결과를 LLM에 재전달
+     * - LLM은 도구 실행 결과를 근거로 최종 답변 생성
+     * API: GET /tool?q={질문}
+     */
+    @GetMapping("/tool")
+    public String tool(@RequestParam String q) {
+        return chatClient.prompt()
+                .user(q)
+                .tools(new DateTimeTools())
+                .call()
                 .content();
     }
 }
